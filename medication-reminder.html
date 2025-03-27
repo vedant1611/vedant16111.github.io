@@ -1,0 +1,317 @@
+{% extends 'layout.html' %}
+
+{% block title %}Medication Reminder{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-prescription-bottle-alt me-2"></i> Post-Transplant Medication Reminders
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Set up and manage medication reminders for post-transplant patients. These reminders help ensure patients follow their prescribed medication schedule.
+                    </p>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Find Patient</h5>
+                                    <div class="mb-3">
+                                        <label for="patientSearchType" class="form-label">Search By</label>
+                                        <select class="form-select" id="patientSearchType">
+                                            <option value="id">Patient ID</option>
+                                            <option value="aadhaar">Aadhaar Number</option>
+                                            <option value="phone">Phone Number</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="patientSearchValue" class="form-label">Search Value</label>
+                                        <input type="text" class="form-control" id="patientSearchValue" placeholder="Enter search value...">
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="button" class="btn btn-primary" id="findPatientForMedicationBtn">Find Patient</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Patient Information</h5>
+                                    <div id="medicationPatientInfo">
+                                        <p class="text-center text-muted mt-4">Patient information will be displayed here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Medication List Section -->
+                    <div id="medicationSection" class="d-none">
+                        <h4 class="border-bottom pb-2 mb-3">Current Medications</h4>
+                        <div class="table-responsive mb-3">
+                            <table class="table table-hover" id="medicationsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Medication</th>
+                                        <th>Dosage</th>
+                                        <th>Frequency</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Medications will be populated here via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Add New Medication Form -->
+                        <div class="card border-primary mb-4">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">Add New Medication</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="addMedicationForm">
+                                    <input type="hidden" id="medicationPatientId">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="medicationName" class="form-label">Medication Name <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="medicationName" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="medicationDosage" class="form-label">Dosage <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="medicationDosage" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="medicationFrequency" class="form-label">Frequency <span class="text-danger">*</span></label>
+                                                <select class="form-select" id="medicationFrequency" required>
+                                                    <option value="" selected disabled>Select</option>
+                                                    <option value="Once daily">Once daily</option>
+                                                    <option value="Twice daily">Twice daily</option>
+                                                    <option value="Three times daily">Three times daily</option>
+                                                    <option value="Four times daily">Four times daily</option>
+                                                    <option value="Every 12 hours">Every 12 hours</option>
+                                                    <option value="Every 8 hours">Every 8 hours</option>
+                                                    <option value="Every 6 hours">Every 6 hours</option>
+                                                    <option value="Weekly">Weekly</option>
+                                                    <option value="As needed">As needed</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="medicationRoute" class="form-label">Route of Administration</label>
+                                                <select class="form-select" id="medicationRoute">
+                                                    <option value="" selected disabled>Select</option>
+                                                    <option value="Oral">Oral</option>
+                                                    <option value="Intravenous">Intravenous</option>
+                                                    <option value="Intramuscular">Intramuscular</option>
+                                                    <option value="Sublingual">Sublingual</option>
+                                                    <option value="Topical">Topical</option>
+                                                    <option value="Subcutaneous">Subcutaneous</option>
+                                                    <option value="Inhalation">Inhalation</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="medicationStartDate" class="form-label">Start Date <span class="text-danger">*</span></label>
+                                                <input type="date" class="form-control" id="medicationStartDate" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="medicationEndDate" class="form-label">End Date</label>
+                                                <input type="date" class="form-control" id="medicationEndDate">
+                                                <div class="form-text">Leave blank if medication is ongoing</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="medicationNotes" class="form-label">Special Instructions</label>
+                                        <textarea class="form-control" id="medicationNotes" rows="2"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="setReminder" checked>
+                                            <label class="form-check-label" for="setReminder">
+                                                Set up patient reminder for this medication
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button type="reset" class="btn btn-secondary me-md-2">Clear</button>
+                                        <button type="submit" class="btn btn-success">Add Medication</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- Reminder Settings -->
+                        <div class="card border-info mb-3">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0">Reminder Settings</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="smsReminder" checked>
+                                            <label class="form-check-label" for="smsReminder">
+                                                Send SMS reminders
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="whatsappReminder">
+                                            <label class="form-check-label" for="whatsappReminder">
+                                                Send WhatsApp reminders
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="reminderFrequency" class="form-label">Reminder Frequency</label>
+                                            <select class="form-select" id="reminderFrequency">
+                                                <option value="As prescribed">As prescribed (follow medication schedule)</option>
+                                                <option value="Daily summary">Daily summary (once per day)</option>
+                                                <option value="Weekly summary">Weekly summary</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="caregiverContact" class="form-label">Additional Caregiver Contact (optional)</label>
+                                            <input type="tel" class="form-control" id="caregiverContact" placeholder="Phone number">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="button" class="btn btn-info" id="saveReminderSettingsBtn">Save Settings</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-warning h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">Medication Information</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="drugInfoSearch" class="form-label">Search Medication</label>
+                        <input type="text" class="form-control" id="drugInfoSearch" placeholder="Type medication name...">
+                    </div>
+                    
+                    <div id="drugInfoContainer">
+                        <div class="text-center py-4">
+                            <i class="fas fa-pills fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">Search for a medication to view information</p>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <h5 class="card-title mt-3">Common Post-Transplant Medications</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Tacrolimus (Prograf)</strong> - Prevents rejection by inhibiting T-cell activation
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Cyclosporine (Neoral, Sandimmune)</strong> - Immunosuppressant to prevent rejection
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Mycophenolate mofetil (CellCept)</strong> - Prevents proliferation of T and B lymphocytes
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Prednisone</strong> - Corticosteroid to reduce inflammation and suppress immune system
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Azathioprine (Imuran)</strong> - Immunosuppressant that affects DNA synthesis
+                        </li>
+                    </ul>
+                    
+                    <div class="d-grid gap-2 mt-3">
+                        <a href="{{ url_for('drug_checklist') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-search-dollar me-1"></i> Find Affordable Alternatives
+                        </a>
+                        <a href="{{ url_for('adverse_reaction') }}" class="btn btn-outline-danger">
+                            <i class="fas fa-exclamation-triangle me-1"></i> Report Adverse Reactions
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Medication Details Modal -->
+<div class="modal fade" id="medicationDetailsModal" tabindex="-1" aria-labelledby="medicationDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="medicationDetailsModalLabel">Medication Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5 id="medDetailName">Medication Name</h5>
+                <p><strong>Dosage:</strong> <span id="medDetailDosage"></span></p>
+                <p><strong>Frequency:</strong> <span id="medDetailFrequency"></span></p>
+                <p><strong>Route:</strong> <span id="medDetailRoute"></span></p>
+                <p><strong>Duration:</strong> <span id="medDetailDuration"></span></p>
+                <p><strong>Special Instructions:</strong> <span id="medDetailNotes"></span></p>
+                
+                <hr>
+                
+                <h6>Reminder Settings</h6>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="medDetailSmsReminder">
+                    <label class="form-check-label" for="medDetailSmsReminder">
+                        Send SMS reminders
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="medDetailWhatsappReminder">
+                    <label class="form-check-label" for="medDetailWhatsappReminder">
+                        Send WhatsApp reminders
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger me-auto" id="deleteMedicationBtn">Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="editMedicationBtn">Edit</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/medication-reminder.js') }}"></script>
+{% endblock %}

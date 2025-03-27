@@ -1,0 +1,238 @@
+{% extends 'layout.html' %}
+
+{% block title %}Patient Questionnaire{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-clipboard-list me-2"></i> Post-Transplant Questionnaire
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        This questionnaire assesses post-transplant patients based on their symptoms and complaints. 
+                        The questions are sequenced by severity, and notifications will be sent to doctors for urgent cases.
+                    </p>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Find Patient</h5>
+                                    <div class="mb-3">
+                                        <label for="questionnairePatientSearch" class="form-label">Search By</label>
+                                        <select class="form-select" id="questionnairePatientSearch">
+                                            <option value="id">Patient ID</option>
+                                            <option value="aadhaar">Aadhaar Number</option>
+                                            <option value="phone">Phone Number</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="questionnaireSearchValue" class="form-label">Search Value</label>
+                                        <input type="text" class="form-control" id="questionnaireSearchValue" placeholder="Enter search value...">
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="button" class="btn btn-primary" id="findPatientForQuestionnaireBtn">Find Patient</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Patient Information</h5>
+                                    <div id="questionnairePatientInfo">
+                                        <p class="text-center text-muted mt-4">Patient information will be displayed here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Questionnaire Section -->
+                    <div id="questionnaireSection" class="d-none">
+                        <div class="card border-primary mb-4">
+                            <div class="card-header bg-primary text-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">Transplant Questionnaire</h5>
+                                    <div>
+                                        <select class="form-select form-select-sm" id="transplantType">
+                                            <option value="" selected disabled>Select Transplant Type</option>
+                                            <option value="Kidney">Kidney</option>
+                                            <option value="Liver">Liver</option>
+                                            <option value="Heart">Heart</option>
+                                            <option value="Lung">Lung</option>
+                                            <option value="Pancreas">Pancreas</option>
+                                            <option value="Multiple Organs">Multiple Organs</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form id="questionnaireForm">
+                                    <input type="hidden" id="questionnairePatientId">
+                                    
+                                    <div id="questionsList">
+                                        <p class="text-center text-muted py-3">Please select a transplant type to load the questionnaire</p>
+                                    </div>
+                                    
+                                    <div class="card border-warning mb-3 d-none" id="severityCard">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h5 class="mb-0">Severity Assessment</h5>
+                                                <h5 class="mb-0">Score: <span id="severityScore">0</span>/10</h5>
+                                            </div>
+                                            <div class="progress mt-2">
+                                                <div class="progress-bar bg-success" id="severityProgressBar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="mt-2 text-muted small">
+                                                <span id="severityMessage">No concerns detected</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="additionalNotes" class="form-label">Additional Notes or Concerns</label>
+                                        <textarea class="form-control" id="additionalNotes" rows="2"></textarea>
+                                    </div>
+                                    
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button type="reset" class="btn btn-secondary me-md-2">Clear</button>
+                                        <button type="submit" class="btn btn-primary">Submit Questionnaire</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- Previous Responses -->
+                        <h4 class="border-bottom pb-2 mb-3">Previous Questionnaire Responses</h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="responsesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Transplant Type</th>
+                                        <th>Severity Score</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Previous responses will be populated here via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-info mb-4">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">Emergency Contact</h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <i class="fas fa-phone-alt fa-3x text-danger mb-3"></i>
+                        <h5>24/7 Transplant Emergency</h5>
+                        <h3><a href="tel:+911234567890" class="text-danger">+91 123-456-7890</a></h3>
+                    </div>
+                    <hr>
+                    <p><strong>When to contact emergency:</strong></p>
+                    <ul>
+                        <li>Severe pain at the transplant site</li>
+                        <li>Fever above 100.5°F (38°C)</li>
+                        <li>Unusual bleeding or discharge</li>
+                        <li>Difficulty breathing</li>
+                        <li>Significant changes in blood pressure</li>
+                        <li>New onset confusion or disorientation</li>
+                        <li>Severe vomiting or diarrhea</li>
+                    </ul>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i> If symptoms are severe, call emergency services (102) immediately.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Questionnaire Guidelines</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>For Patients:</strong></p>
+                    <ul>
+                        <li>Answer all questions honestly and accurately</li>
+                        <li>Report any changes in symptoms, even if they seem minor</li>
+                        <li>Complete the questionnaire weekly or as directed by your doctor</li>
+                        <li>If you're unsure about a question, consult with your healthcare provider</li>
+                    </ul>
+                    <hr>
+                    <p><strong>For Doctors:</strong></p>
+                    <ul>
+                        <li>Severity scores of 7 or higher require immediate attention</li>
+                        <li>Scores between 4-6 warrant follow-up within 24-48 hours</li>
+                        <li>Consistent patterns in responses may indicate developing complications</li>
+                        <li>Document all follow-up actions in the patient's medical record</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Response Details Modal -->
+<div class="modal fade" id="responseDetailsModal" tabindex="-1" aria-labelledby="responseDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="responseDetailsModalLabel">Questionnaire Response Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Date:</strong> <span id="responseDate"></span></p>
+                        <p><strong>Transplant Type:</strong> <span id="responseTransplantType"></span></p>
+                        <p><strong>Severity Score:</strong> <span id="responseSeverityScore"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert" id="responseSeverityAlert">
+                            <span id="responseSeverityMessage"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <h5 class="border-bottom pb-2 mb-3">Patient Responses</h5>
+                <div id="responseAnswers">
+                    <!-- Responses will be populated here via JavaScript -->
+                </div>
+                
+                <div class="mb-3">
+                    <h5 class="border-bottom pb-2 mb-3">Additional Notes</h5>
+                    <p id="responseNotes"></p>
+                </div>
+                
+                <div class="mb-3">
+                    <h5 class="border-bottom pb-2 mb-3">Doctor Comments</h5>
+                    <textarea class="form-control" id="doctorComments" rows="3" placeholder="Add your comments here..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger me-auto" id="flagUrgentBtn">
+                    <i class="fas fa-flag me-1"></i> Flag as Urgent
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveCommentsBtn">Save Comments</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="../static/js/questionnaire.js"></script>
+{% endblock %}

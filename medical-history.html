@@ -1,0 +1,300 @@
+{% extends 'layout.html' %}
+
+{% block title %}Medical History{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="mb-0">
+                        <i class="fas fa-notes-medical me-2"></i> Patient Medical History
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Access and update detailed medical history of patients. Enter the patient ID or use Aadhaar/phone number to find the patient.
+                    </p>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Find Patient</h5>
+                                    <div class="mb-3">
+                                        <label for="searchType" class="form-label">Search By</label>
+                                        <select class="form-select" id="searchType">
+                                            <option value="id">Patient ID</option>
+                                            <option value="aadhaar">Aadhaar Number</option>
+                                            <option value="phone">Phone Number</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="searchValue" class="form-label">Search Value</label>
+                                        <input type="text" class="form-control" id="searchValue" placeholder="Enter search value...">
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="button" class="btn btn-primary" id="findPatientBtn">Find Patient</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Patient Information</h5>
+                                    <div id="patientInfoContainer">
+                                        <p class="text-center text-muted mt-4">Patient information will be displayed here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="medicalHistorySection" class="d-none">
+                        <h4 class="border-bottom pb-2 mb-3">Medical History Records</h4>
+                        <div class="table-responsive mb-3">
+                            <table class="table table-hover" id="historyTable">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Doctor</th>
+                                        <th>Diagnosis</th>
+                                        <th>Treatment</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Medical history records will be populated here via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="card border-primary mb-4">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">Add New Medical Record</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="medicalHistoryForm">
+                                    <input type="hidden" id="historyPatientId">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="diagnosis" class="form-label">Diagnosis</label>
+                                                <input type="text" class="form-control" id="diagnosis" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="treatment" class="form-label">Treatment</label>
+                                                <input type="text" class="form-control" id="treatment" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="historyNotes" class="form-label">Detailed Notes</label>
+                                        <textarea class="form-control" id="historyNotes" rows="3" required></textarea>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="proceduresPerformed" class="form-label">Procedures Performed</label>
+                                                <input type="text" class="form-control" id="proceduresPerformed">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="followUpDate" class="form-label">Follow-up Date (if required)</label>
+                                                <input type="date" class="form-control" id="followUpDate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button type="reset" class="btn btn-secondary me-md-2">Clear</button>
+                                        <button type="submit" class="btn btn-primary">Save Record</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- Surgery & Transplantation Section -->
+                        <div class="card border-danger mb-3">
+                            <div class="card-header bg-danger text-white">
+                                <h5 class="mb-0">Surgery & Transplantation Records</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive mb-3">
+                                    <table class="table table-hover" id="surgeryTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Surgery Type</th>
+                                                <th>Surgeon</th>
+                                                <th>Organ/Procedure</th>
+                                                <th>Outcome</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Surgery records will be populated here via JavaScript -->
+                                            <tr>
+                                                <td colspan="5" class="text-center">No surgery records available</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#addSurgeryModal">
+                                    <i class="fas fa-plus me-1"></i> Add Surgery/Transplant Record
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Laboratory Results Section -->
+                        <div class="card border-info mb-3">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0">Laboratory Test Results</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive mb-3">
+                                    <table class="table table-hover" id="labTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Test Name</th>
+                                                <th>Result</th>
+                                                <th>Reference Range</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Lab results will be populated here via JavaScript -->
+                                            <tr>
+                                                <td colspan="5" class="text-center">No laboratory records available</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#addLabModal">
+                                    <i class="fas fa-plus me-1"></i> Add Laboratory Result
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Surgery/Transplant Modal -->
+<div class="modal fade" id="addSurgeryModal" tabindex="-1" aria-labelledby="addSurgeryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="addSurgeryModalLabel">Add Surgery/Transplant Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="surgeryForm">
+                    <div class="mb-3">
+                        <label for="surgeryDate" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="surgeryDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="surgeryType" class="form-label">Surgery Type</label>
+                        <select class="form-select" id="surgeryType" required>
+                            <option value="" selected disabled>Select</option>
+                            <option value="Organ Transplantation">Organ Transplantation</option>
+                            <option value="Exploratory Surgery">Exploratory Surgery</option>
+                            <option value="Corrective Surgery">Corrective Surgery</option>
+                            <option value="Emergency Surgery">Emergency Surgery</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="surgeon" class="form-label">Surgeon</label>
+                        <input type="text" class="form-control" id="surgeon" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="organProcedure" class="form-label">Organ/Procedure</label>
+                        <input type="text" class="form-control" id="organProcedure" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="outcome" class="form-label">Outcome</label>
+                        <select class="form-select" id="outcome" required>
+                            <option value="" selected disabled>Select</option>
+                            <option value="Successful">Successful</option>
+                            <option value="Partially Successful">Partially Successful</option>
+                            <option value="Complications">Complications</option>
+                            <option value="Unsuccessful">Unsuccessful</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="surgeryNotes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="surgeryNotes" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="saveSurgeryBtn">Save Record</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Laboratory Result Modal -->
+<div class="modal fade" id="addLabModal" tabindex="-1" aria-labelledby="addLabModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title" id="addLabModalLabel">Add Laboratory Result</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="labForm">
+                    <div class="mb-3">
+                        <label for="labDate" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="labDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="testName" class="form-label">Test Name</label>
+                        <input type="text" class="form-control" id="testName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="testResult" class="form-label">Result</label>
+                        <input type="text" class="form-control" id="testResult" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="referenceRange" class="form-label">Reference Range</label>
+                        <input type="text" class="form-control" id="referenceRange">
+                    </div>
+                    <div class="mb-3">
+                        <label for="resultStatus" class="form-label">Status</label>
+                        <select class="form-select" id="resultStatus" required>
+                            <option value="" selected disabled>Select</option>
+                            <option value="Normal">Normal</option>
+                            <option value="Abnormal - Low">Abnormal - Low</option>
+                            <option value="Abnormal - High">Abnormal - High</option>
+                            <option value="Critical">Critical</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="labNotes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="labNotes" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-info" id="saveLabBtn">Save Result</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/medical-history.js') }}"></script>
+{% endblock %}

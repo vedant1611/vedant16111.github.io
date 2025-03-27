@@ -1,0 +1,139 @@
+{% extends 'layout.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+        {% if 'doctor_id' not in session %}
+        <!-- Login Section -->
+        <div class="col-md-6">
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="text-center mb-0">Doctor Login</h3>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('login') }}" method="post">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            Demo credentials: demo@doctor.com / password123
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Info Section -->
+        <div class="col-md-6">
+            <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                    <h3 class="text-center mb-0">Organ Transplant Management System</h3>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">A complete solution for transplant doctors</h5>
+                    <p class="card-text">Manage potential organ donors, patient medical history, post-transplant care, and medication reminders all in one place.</p>
+                    <hr>
+                    <h6 class="card-subtitle mb-2">Key Features:</h6>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><i class="fas fa-user-plus text-primary me-2"></i> Register potential organ donors</li>
+                        <li class="list-group-item"><i class="fas fa-hospital-user text-primary me-2"></i> Manage patient records with Aadhaar/Phone linkage</li>
+                        <li class="list-group-item"><i class="fas fa-notes-medical text-primary me-2"></i> Complete medical history access</li>
+                        <li class="list-group-item"><i class="fas fa-prescription-bottle-alt text-primary me-2"></i> Post-transplant medication reminders</li>
+                        <li class="list-group-item"><i class="fas fa-clipboard-list text-primary me-2"></i> Severity-based questionnaire system</li>
+                        <li class="list-group-item"><i class="fas fa-pills text-primary me-2"></i> Drug alternatives for affordability</li>
+                    </ul>
+                    <p class="card-text"><small class="text-muted">Designed for medical professionals, by medical professionals</small></p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <!-- Welcome Dashboard -->
+        <div class="col-md-10">
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">Welcome, Dr. {{ session['doctor_name'] }}</h3>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Your transplant management portal is ready</h5>
+                    <p class="card-text">Use the navigation menu to access different features of the system.</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 border-primary">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-user-plus fa-3x text-primary mb-3"></i>
+                                    <h5 class="card-title">Donor Registration</h5>
+                                    <p class="card-text">Register potential organ donors with detailed information</p>
+                                    <a href="{{ url_for('donor_registration') }}" class="btn btn-sm btn-primary">Access</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 border-info">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-hospital-user fa-3x text-info mb-3"></i>
+                                    <h5 class="card-title">Patient Dashboard</h5>
+                                    <p class="card-text">View and manage all registered patients</p>
+                                    <a href="{{ url_for('patient_dashboard') }}" class="btn btn-sm btn-info">Access</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 border-warning">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-notes-medical fa-3x text-warning mb-3"></i>
+                                    <h5 class="card-title">Medical History</h5>
+                                    <p class="card-text">View and update detailed patient medical histories</p>
+                                    <a href="{{ url_for('medical_history') }}" class="btn btn-sm btn-warning">Access</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 border-success">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-prescription-bottle-alt fa-3x text-success mb-3"></i>
+                                    <h5 class="card-title">Medication Reminders</h5>
+                                    <p class="card-text">Set up and manage post-transplant medication schedules</p>
+                                    <a href="{{ url_for('medication_reminder') }}" class="btn btn-sm btn-success">Access</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 border-danger">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-clipboard-list fa-3x text-danger mb-3"></i>
+                                    <h5 class="card-title">Patient Questionnaire</h5>
+                                    <p class="card-text">Track post-transplant health with severity assessments</p>
+                                    <a href="{{ url_for('questionnaire') }}" class="btn btn-sm btn-danger">Access</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 border-secondary">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-pills fa-3x text-secondary mb-3"></i>
+                                    <h5 class="card-title">Drug Alternatives</h5>
+                                    <p class="card-text">Find affordable medication options for patients</p>
+                                    <a href="{{ url_for('drug_checklist') }}" class="btn btn-sm btn-secondary">Access</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

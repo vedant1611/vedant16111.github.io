@@ -1,0 +1,103 @@
+/* Minimal custom styling to complement the Bootstrap theme */
+/* Maintaining the dark theme consistency */
+
+/* Utility classes for spacing */
+.mt-6 {
+    margin-top: 4rem;
+}
+
+.mb-6 {
+    margin-bottom: 4rem;
+}
+
+/* Custom card hover effect */
+.card-hover:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Status indicators */
+.status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.status-active {
+    background-color: var(--bs-success);
+}
+
+.status-waiting {
+    background-color: var(--bs-warning);
+}
+
+.status-critical {
+    background-color: var(--bs-danger);
+}
+
+.status-inactive {
+    background-color: var(--bs-secondary);
+}
+
+/* Severity levels for questionnaire */
+.severity-low {
+    color: var(--bs-success);
+}
+
+.severity-medium {
+    color: var(--bs-warning);
+}
+
+.severity-high {
+    color: var(--bs-danger);
+}
+
+/* Custom badges for transplant types */
+.badge-organ {
+    font-size: 0.8rem;
+    padding: 0.35em 0.65em;
+    margin-right: 0.25rem;
+}
+
+/* Custom styles for charts */
+.chart-container {
+    position: relative;
+    height: 200px;
+    width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .mobile-scroll {
+        overflow-x: auto;
+    }
+}
+
+/* Print styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    body {
+        font-size: 12pt;
+        color: #000;
+        background-color: #fff;
+    }
+    
+    .card {
+        border: 1px solid #ddd !important;
+    }
+    
+    .card-header {
+        background-color: #f8f9fa !important;
+        color: #000 !important;
+    }
+}

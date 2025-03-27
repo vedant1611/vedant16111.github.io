@@ -1,0 +1,304 @@
+<link rel="stylesheet" href="../static/css/adverse-reaction.css">
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i> Adverse Drug Reaction Reporting
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Report adverse reactions to post-transplant medications. This information helps in adjusting medication regimens and preventing future complications.
+                    </p>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Find Patient</h5>
+                                    <div class="mb-3">
+                                        <label for="adrPatientSearch" class="form-label">Search By</label>
+                                        <select class="form-select" id="adrPatientSearch">
+                                            <option value="id">Patient ID</option>
+                                            <option value="aadhaar">Aadhaar Number</option>
+                                            <option value="phone">Phone Number</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="adrSearchValue" class="form-label">Search Value</label>
+                                        <input type="text" class="form-control" id="adrSearchValue" placeholder="Enter search value...">
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="button" class="btn btn-primary" id="findPatientForAdrBtn">Find Patient</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Patient Information</h5>
+                                    <div id="adrPatientInfo">
+                                        <p class="text-center text-muted mt-4">Patient information will be displayed here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ADR Reporting Section -->
+                    <div id="adrReportingSection" class="d-none">
+                        <div class="card border-primary mb-4">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">Report Adverse Drug Reaction</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="adrReportForm">
+                                    <input type="hidden" id="adrPatientId">
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="adrMedication" class="form-label">Suspected Medication <span class="text-danger">*</span></label>
+                                                <select class="form-select" id="adrMedication" required>
+                                                    <option value="" selected disabled>Select medication</option>
+                                                    <!-- Medications will be populated here via JavaScript -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="adrOnsetDate" class="form-label">Onset Date <span class="text-danger">*</span></label>
+                                                <input type="date" class="form-control" id="adrOnsetDate" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="adrSymptoms" class="form-label">Symptoms <span class="text-danger">*</span></label>
+                                        <textarea class="form-control" id="adrSymptoms" rows="3" required placeholder="Describe all symptoms in detail..."></textarea>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="adrSeverity" class="form-label">Severity <span class="text-danger">*</span></label>
+                                                <select class="form-select" id="adrSeverity" required>
+                                                    <option value="" selected disabled>Select severity</option>
+                                                    <option value="Mild">Mild - No intervention needed</option>
+                                                    <option value="Moderate">Moderate - Outpatient treatment needed</option>
+                                                    <option value="Severe">Severe - Hospitalization or prolongation of existing hospitalization</option>
+                                                    <option value="Life-threatening">Life-threatening - Immediate risk of death</option>
+                                                    <option value="Fatal">Fatal - Resulted in death</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="adrOutcome" class="form-label">Outcome</label>
+                                                <select class="form-select" id="adrOutcome">
+                                                    <option value="" selected disabled>Select outcome</option>
+                                                    <option value="Recovered">Recovered/Resolved</option>
+                                                    <option value="Recovering">Recovering/Resolving</option>
+                                                    <option value="Not recovered">Not recovered/Not resolved</option>
+                                                    <option value="Recovered with sequelae">Recovered with sequelae</option>
+                                                    <option value="Fatal">Fatal</option>
+                                                    <option value="Unknown">Unknown</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="adrAction" class="form-label">Action Taken</label>
+                                        <select class="form-select" id="adrAction">
+                                            <option value="" selected disabled>Select action</option>
+                                            <option value="Drug withdrawn">Drug withdrawn</option>
+                                            <option value="Dose reduced">Dose reduced</option>
+                                            <option value="Dose increased">Dose increased</option>
+                                            <option value="Dose not changed">Dose not changed</option>
+                                            <option value="Unknown">Unknown</option>
+                                            <option value="Not applicable">Not applicable</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="adrNotes" class="form-label">Additional Notes</label>
+                                        <textarea class="form-control" id="adrNotes" rows="2" placeholder="Any other relevant information..."></textarea>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="adrSeriousCheck">
+                                            <label class="form-check-label" for="adrSeriousCheck">
+                                                Mark as Serious Adverse Event requiring immediate attention
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button type="reset" class="btn btn-secondary me-md-2">Clear</button>
+                                        <button type="submit" class="btn btn-danger">Submit Report</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- Previous ADR Reports -->
+                        <h4 class="border-bottom pb-2 mb-3">Previous Adverse Reaction Reports</h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="adrTable">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Medication</th>
+                                        <th>Symptoms</th>
+                                        <th>Severity</th>
+                                        <th>Outcome</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Previous ADR reports will be populated here via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-info mb-4">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">ADR Assessment Guide</h4>
+                </div>
+                <div class="card-body">
+                    <h5>Causality Assessment</h5>
+                    <ul>
+                        <li><strong>Definite:</strong> Clear temporal relationship, known reaction, improvement on withdrawal</li>
+                        <li><strong>Probable:</strong> Reasonable temporal relationship, unlikely to be attributed to disease/other drugs</li>
+                        <li><strong>Possible:</strong> Reasonable temporal relationship, could be attributed to disease/other drugs</li>
+                        <li><strong>Unlikely:</strong> Temporality makes causal relationship improbable</li>
+                    </ul>
+                    <hr>
+                    <h5>Common Post-Transplant ADRs</h5>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Medication</th>
+                                    <th>Common Adverse Effects</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Tacrolimus</td>
+                                    <td>Nephrotoxicity, neurotoxicity, hyperglycemia, hypertension</td>
+                                </tr>
+                                <tr>
+                                    <td>Cyclosporine</td>
+                                    <td>Nephrotoxicity, hypertension, hirsutism, gingival hyperplasia</td>
+                                </tr>
+                                <tr>
+                                    <td>Mycophenolate</td>
+                                    <td>GI disturbances, leukopenia, increased infection risk</td>
+                                </tr>
+                                <tr>
+                                    <td>Corticosteroids</td>
+                                    <td>Weight gain, mood changes, osteoporosis, glucose intolerance</td>
+                                </tr>
+                                <tr>
+                                    <td>Sirolimus</td>
+                                    <td>Hyperlipidemia, thrombocytopenia, delayed wound healing</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle me-2"></i> Any serious adverse events must be reported to relevant regulatory authorities.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Management Options</h4>
+                </div>
+                <div class="card-body">
+                    <p>When an adverse drug reaction is confirmed:</p>
+                    <ol>
+                        <li><strong>Dose modification:</strong> Adjust dosage based on severity</li>
+                        <li><strong>Drug substitution:</strong> Switch to alternative medication</li>
+                        <li><strong>Symptomatic treatment:</strong> Manage symptoms without changing immunosuppression</li>
+                        <li><strong>Monitoring:</strong> Increase frequency of relevant laboratory tests</li>
+                        <li><strong>Patient education:</strong> Inform about signs to watch for</li>
+                    </ol>
+                    <hr>
+                    <div class="d-grid gap-2 mt-3">
+                        <a href="./drug-checklist.html" class="btn btn-outline-primary">
+                            <i class="fas fa-search-dollar me-1"></i> Find Alternative Medications
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ADR Details Modal -->
+<div class="modal fade" id="adrDetailsModal" tabindex="-1" aria-labelledby="adrDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="adrDetailsModalLabel">Adverse Reaction Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Patient:</strong> <span id="detailPatientName"></span></p>
+                        <p><strong>Medication:</strong> <span id="detailMedication"></span></p>
+                        <p><strong>Onset Date:</strong> <span id="detailOnsetDate"></span></p>
+                        <p><strong>Reported Date:</strong> <span id="detailReportDate"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Severity:</strong> <span id="detailSeverity"></span></p>
+                        <p><strong>Outcome:</strong> <span id="detailOutcome"></span></p>
+                        <p><strong>Action Taken:</strong> <span id="detailAction"></span></p>
+                        <p><strong>Serious Event:</strong> <span id="detailSerious"></span></p>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <h5 class="border-bottom pb-2 mb-3">Symptoms</h5>
+                    <p id="detailSymptoms"></p>
+                </div>
+                
+                <div class="mb-3">
+                    <h5 class="border-bottom pb-2 mb-3">Additional Notes</h5>
+                    <p id="detailNotes"></p>
+                </div>
+                
+                <div class="mb-3">
+                    <h5 class="border-bottom pb-2 mb-3">Follow-up Comments</h5>
+                    <textarea class="form-control" id="followupComments" rows="3" placeholder="Add follow-up comments here..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-warning me-auto" id="updateOutcomeBtn">
+                    <i class="fas fa-edit me-1"></i> Update Outcome
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveFollowupBtn">Save Comments</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../static/js/questionnaire.js"></script>
+

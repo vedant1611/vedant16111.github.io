@@ -1,0 +1,279 @@
+{% extends 'layout.html' %}
+
+{% block title %}Patient Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-hospital-user me-2"></i> Patient Dashboard
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        View all registered patients and manage their records. Use the search function to quickly find specific patients.
+                    </p>
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="patientSearch" placeholder="Search by name, ID, Aadhaar, or phone...">
+                                <button class="btn btn-outline-secondary" type="button" id="searchButton">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#registerPatientModal">
+                                <i class="fas fa-plus me-1"></i> New Patient
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="patientsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Age/Gender</th>
+                                    <th>Blood Type</th>
+                                    <th>Contact</th>
+                                    <th>ID Type</th>
+                                    <th>Registration</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Patient records will be populated here via JavaScript -->
+                                <tr>
+                                    <td colspan="8" class="text-center">No patient records available</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-primary h-100">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Patient Statistics</h4>
+                </div>
+                <div class="card-body">
+                    <canvas id="patientStatsChart"></canvas>
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <div class="border rounded p-2 text-center mb-2">
+                                <h5 class="text-primary mb-0" id="totalPatients">0</h5>
+                                <small>Total Patients</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-2 text-center mb-2">
+                                <h5 class="text-success mb-0" id="transplantPatients">0</h5>
+                                <small>Transplants</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-2 text-center">
+                                <h5 class="text-info mb-0" id="waitlistPatients">0</h5>
+                                <small>On Waitlist</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-2 text-center">
+                                <h5 class="text-warning mb-0" id="followupPatients">0</h5>
+                                <small>Follow-ups</small>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <h5 class="text-center">Quick Links</h5>
+                    <div class="d-grid gap-2 mt-3">
+                        <a href="{{ url_for('medical_history') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-notes-medical me-1"></i> View Medical Records
+                        </a>
+                        <a href="{{ url_for('medication_reminder') }}" class="btn btn-outline-success">
+                            <i class="fas fa-prescription-bottle-alt me-1"></i> Set Medication Reminders
+                        </a>
+                        <a href="{{ url_for('questionnaire') }}" class="btn btn-outline-danger">
+                            <i class="fas fa-clipboard-list me-1"></i> Patient Questionnaires
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Register Patient Modal -->
+<div class="modal fade" id="registerPatientModal" tabindex="-1" aria-labelledby="registerPatientModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="registerPatientModalLabel">Register New Patient</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="registerPatientForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="patientName" class="form-label">Full Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="patientName" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="patientAge" class="form-label">Age <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="patientAge" min="0" max="120" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="patientGender" class="form-label">Gender <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="patientGender" required>
+                                            <option value="" selected disabled>Select</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="patientBloodType" class="form-label">Blood Type <span class="text-danger">*</span></label>
+                                <select class="form-select" id="patientBloodType" required>
+                                    <option value="" selected disabled>Select</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="patientPhone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" id="patientPhone" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="patientAadhaar" class="form-label">Aadhaar Number</label>
+                                <input type="text" class="form-control" id="patientAadhaar" pattern="[0-9]{12}">
+                                <div class="form-text">12-digit Aadhaar number without spaces</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="patientAddress" class="form-label">Address <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="patientAddress" rows="3" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="patientStatus" class="form-label">Current Status <span class="text-danger">*</span></label>
+                                <select class="form-select" id="patientStatus" required>
+                                    <option value="" selected disabled>Select</option>
+                                    <option value="Pre-Transplant">Pre-Transplant (On Waitlist)</option>
+                                    <option value="Post-Transplant">Post-Transplant (Recovery)</option>
+                                    <option value="Regular Follow-up">Regular Follow-up</option>
+                                    <option value="Emergency">Emergency</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="medicalCondition" class="form-label">Primary Medical Condition</label>
+                                <input type="text" class="form-control" id="medicalCondition">
+                            </div>
+                            <div class="mb-3">
+                                <label for="transplantType" class="form-label">Transplant Type (if applicable)</label>
+                                <select class="form-select" id="transplantType">
+                                    <option value="" selected>Not Applicable</option>
+                                    <option value="Kidney">Kidney</option>
+                                    <option value="Liver">Liver</option>
+                                    <option value="Heart">Heart</option>
+                                    <option value="Lung">Lung</option>
+                                    <option value="Pancreas">Pancreas</option>
+                                    <option value="Cornea">Cornea</option>
+                                    <option value="Multiple">Multiple Organs</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="savePatientBtn">Save Patient</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Patient Details Modal -->
+<div class="modal fade" id="patientDetailsModal" tabindex="-1" aria-labelledby="patientDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title" id="patientDetailsModalLabel">Patient Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="border-bottom pb-2">Personal Information</h5>
+                        <p><strong>Name:</strong> <span id="detailsName"></span></p>
+                        <p><strong>Age/Gender:</strong> <span id="detailsAgeGender"></span></p>
+                        <p><strong>Blood Type:</strong> <span id="detailsBloodType"></span></p>
+                        <p><strong>Phone:</strong> <span id="detailsPhone"></span></p>
+                        <p><strong>Aadhaar:</strong> <span id="detailsAadhaar"></span></p>
+                        <p><strong>Address:</strong> <span id="detailsAddress"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="border-bottom pb-2">Medical Information</h5>
+                        <p><strong>Status:</strong> <span id="detailsStatus"></span></p>
+                        <p><strong>Medical Condition:</strong> <span id="detailsCondition"></span></p>
+                        <p><strong>Transplant Type:</strong> <span id="detailsTransplant"></span></p>
+                        <p><strong>Registration Date:</strong> <span id="detailsRegistration"></span></p>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h5 class="border-bottom pb-2">Quick Actions</h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="#" class="btn btn-sm btn-outline-primary" id="detailsViewMedical">
+                                <i class="fas fa-notes-medical me-1"></i> View Medical History
+                            </a>
+                            <a href="#" class="btn btn-sm btn-outline-success" id="detailsSetMedication">
+                                <i class="fas fa-prescription-bottle-alt me-1"></i> Set Medication
+                            </a>
+                            <a href="#" class="btn btn-sm btn-outline-warning" id="detailsQuestionnaire">
+                                <i class="fas fa-clipboard-list me-1"></i> Questionnaire
+                            </a>
+                            <a href="#" class="btn btn-sm btn-outline-danger" id="detailsAdverseReaction">
+                                <i class="fas fa-exclamation-triangle me-1"></i> Report Adverse Reaction
+                            </a>
+                            <button class="btn btn-sm btn-outline-secondary" id="detailsEditPatient">
+                                <i class="fas fa-edit me-1"></i> Edit Patient
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/patient-dashboard.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chart-config.js') }}"></script>
+{% endblock %}

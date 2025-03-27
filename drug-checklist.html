@@ -1,0 +1,237 @@
+{% extends 'layout.html' %}
+
+{% block title %}Drug Alternatives Checklist{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-pills me-2"></i> Drug Alternatives Checklist
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        This tool helps doctors identify affordable alternative medications for transplant patients.
+                        Select a medication to see its alternatives with different brand names, manufacturers, and price points.
+                    </p>
+                    
+                    <div class="row mb-4">
+                        <div class="col-lg-6">
+                            <div class="form-group mb-3">
+                                <label for="medicationSelect" class="form-label">Select Medication</label>
+                                <select class="form-select" id="medicationSelect">
+                                    <option value="" selected disabled>Choose a medication...</option>
+                                    <!-- Options will be populated by JavaScript -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <form id="filterForm" class="mt-4 mt-lg-0">
+                                <label class="form-label">Filter by Price Range (₹)</label>
+                                <div class="row g-2">
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text">Min</span>
+                                            <input type="number" class="form-control" id="priceRangeMin" min="0">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text">Max</span>
+                                            <input type="number" class="form-control" id="priceRangeMax" min="0">
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-secondary h-100">Filter</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4 border-bottom pb-4">
+                        <h5>Price Comparison</h5>
+                        <div class="chart-container" style="position: relative; height: 300px;">
+                            <canvas id="comparisonChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div id="alternativesContainer">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Please select a medication to view alternatives.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-info mb-4">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">Post-Transplant Medications</h4>
+                </div>
+                <div class="card-body">
+                    <p>Common immunosuppressants used after organ transplantation:</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Tacrolimus
+                            <button class="btn btn-sm btn-outline-primary quick-select" data-medication="Tacrolimus">View</button>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Mycophenolate
+                            <button class="btn btn-sm btn-outline-primary quick-select" data-medication="Mycophenolate">View</button>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Prednisolone
+                            <button class="btn btn-sm btn-outline-primary quick-select" data-medication="Prednisolone">View</button>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Cyclosporine
+                            <button class="btn btn-sm btn-outline-primary quick-select" data-medication="Cyclosporine">View</button>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Azathioprine
+                            <button class="btn btn-sm btn-outline-primary quick-select" data-medication="Azathioprine">View</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Selection Guide</h4>
+                </div>
+                <div class="card-body">
+                    <h5>Factors to Consider</h5>
+                    <ul>
+                        <li><strong>Bioequivalence:</strong> Generic alternatives should be bioequivalent to brand-name drugs</li>
+                        <li><strong>Therapeutic Index:</strong> Drugs with narrow therapeutic indices may require more careful consideration</li>
+                        <li><strong>Patient Factors:</strong> Consider patient's economic status, insurance coverage, and medication history</li>
+                        <li><strong>Availability:</strong> Check local availability of alternatives</li>
+                    </ul>
+                    <hr>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Always consult with a pharmacist before switching between brands, especially for immunosuppressants.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i> Market Trends
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Recent Generic Market Changes</h5>
+                            <ul>
+                                <li>Several new generic manufacturers entered the immunosuppressant market in 2023</li>
+                                <li>Average price reductions of 15-30% for most commonly used medications</li>
+                                <li>Greater price variations in rural vs. urban areas</li>
+                                <li>Government initiatives to increase essential medication availability</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Resources for Cost Assistance</h5>
+                            <ul>
+                                <li>Transplant Medication Assistance Program (TMAP): Financial assistance for eligible patients</li>
+                                <li>Hospital Pharmacy Discount Programs: Many hospitals offer discount programs</li>
+                                <li>Manufacturer Patient Assistance Programs: Direct assistance from drug manufacturers</li>
+                                <li>NGO Support: Several NGOs provide medication subsidies for transplant patients</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Selection Modal -->
+<div class="modal fade" id="selectionModal" tabindex="-1" aria-labelledby="selectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="selectionModalLabel">Alternative Selected</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h5 id="selectedBrand"></h5>
+                        <p><strong>Generic Medication:</strong> <span id="selectedMedication"></span></p>
+                        <p><strong>Manufacturer:</strong> <span id="selectedManufacturer"></span></p>
+                        <p><strong>Dosage:</strong> <span id="selectedDosage"></span></p>
+                        <p><strong>Price:</strong> <span id="selectedPrice"></span></p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-check-circle text-success fa-5x mb-3"></i>
+                    </div>
+                </div>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Potential Savings:</strong> <span id="potentialSavings"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="prescriptionNotes" class="form-label">Prescription Notes</label>
+                    <textarea class="form-control" id="prescriptionNotes" rows="2" placeholder="Add notes for this prescription..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="savePrescriptionBtn">Save to Patient Record</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/drug-checklist.js') }}"></script>
+<script>
+    // Initialize quick select buttons
+    document.addEventListener('DOMContentLoaded', function() {
+        const quickSelectButtons = document.querySelectorAll('.quick-select');
+        quickSelectButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const medication = this.dataset.medication;
+                const select = document.getElementById('medicationSelect');
+                
+                // Wait for the options to be populated
+                setTimeout(() => {
+                    if (select.querySelector(`option[value="${medication}"]`)) {
+                        select.value = medication;
+                        // Trigger change event
+                        const event = new Event('change');
+                        select.dispatchEvent(event);
+                    } else {
+                        showAlert(`No alternatives found for ${medication}`, 'warning');
+                    }
+                }, 500);
+            });
+        });
+        
+        // Example implementation for Save to Patient Record button
+        const savePrescriptionBtn = document.getElementById('savePrescriptionBtn');
+        if (savePrescriptionBtn) {
+            savePrescriptionBtn.addEventListener('click', function() {
+                // In a real app, this would save to the patient's record
+                showAlert('Alternative saved to patient record', 'success');
+                const modal = bootstrap.Modal.getInstance(document.getElementById('selectionModal'));
+                modal.hide();
+            });
+        }
+    });
+</script>
+{% endblock %}

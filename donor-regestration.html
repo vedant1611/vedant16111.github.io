@@ -1,0 +1,445 @@
+{% extends 'layout.html' %} {% block title %}Donor Registration{% endblock %} {%
+    block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-primary mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">
+                            <i class="fas fa-user-plus me-2"></i> Potential Organ
+                            Donor Registration
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            Register deceased or moribund patients whose organs may
+                            be available for transplantation. Complete all fields
+                            with accurate information to help match donors with
+                            compatible recipients.
+                        </p>
+                        <form id="donor-registration-form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="border-bottom pb-2 mb-3">
+                                        Personal Information
+                                    </h5>
+                                    <div class="mb-3">
+                                        <label for="donorName" class="form-label"
+                                            >Full Name
+                                            <span class="text-danger"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="donorName"
+                                            required
+                                        />
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label
+                                                    for="donorAge"
+                                                    class="form-label"
+                                                    >Age
+                                                    <span class="text-danger"
+                                                        >*</span
+                                                    ></label
+                                                >
+                                                <input
+                                                    type="number"
+                                                    class="form-control"
+                                                    id="donorAge"
+                                                    min="0"
+                                                    max="120"
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label
+                                                    for="donorGender"
+                                                    class="form-label"
+                                                    >Gender
+                                                    <span class="text-danger"
+                                                        >*</span
+                                                    ></label
+                                                >
+                                                <select
+                                                    class="form-select"
+                                                    id="donorGender"
+                                                    required
+                                                >
+                                                    <option
+                                                        value=""
+                                                        selected
+                                                        disabled
+                                                    >
+                                                        Select
+                                                    </option>
+                                                    <option value="Male">
+                                                        Male
+                                                    </option>
+                                                    <option value="Female">
+                                                        Female
+                                                    </option>
+                                                    <option value="Other">
+                                                        Other
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label
+                                            for="donorBloodType"
+                                            class="form-label"
+                                            >Blood Type
+                                            <span class="text-danger"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <select
+                                            class="form-select"
+                                            id="donorBloodType"
+                                            required
+                                        >
+                                            <option value="" selected disabled>
+                                                Select
+                                            </option>
+                                            <option value="A+">A+</option>
+                                            <option value="A-">A-</option>
+                                            <option value="B+">B+</option>
+                                            <option value="B-">B-</option>
+                                            <option value="AB+">AB+</option>
+                                            <option value="AB-">AB-</option>
+                                            <option value="O+">O+</option>
+                                            <option value="O-">O-</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label
+                                            for="donorHospital"
+                                            class="form-label"
+                                            >Current Hospital
+                                            <span class="text-danger"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="donorHospital"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 class="border-bottom pb-2 mb-3">
+                                        Medical Information
+                                    </h5>
+                                    <div class="mb-3">
+                                        <label for="donorStatus" class="form-label"
+                                            >Current Status
+                                            <span class="text-danger"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <select
+                                            class="form-select"
+                                            id="donorStatus"
+                                            required
+                                        >
+                                            <option value="" selected disabled>
+                                                Select
+                                            </option>
+                                            <option value="Deceased">
+                                                Deceased
+                                            </option>
+                                            <option value="Brain Dead">
+                                                Brain Dead
+                                            </option>
+                                            <option value="Moribund">
+                                                Moribund
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="causeOfDeath" class="form-label"
+                                            >Cause of Death/Critical Condition
+                                            <span class="text-danger"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="causeOfDeath"
+                                            required
+                                        />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label"
+                                            >Potential Organs for Donation
+                                            <span class="text-danger"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <div class="form-check">
+                                            <input
+                                                class="form-check-input"
+                                                type="checkbox"
+                                                value="Kidney"
+                                                id="kidneyCheck"
+                                            />
+                                            <label
+                                                class="form-check-label"
+                                                for="kidneyCheck"
+                                            >
+                                                Kidney
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input
+                                                class="form-check-input"
+                                                type="checkbox"
+                                                value="Liver"
+                                                id="liverCheck"
+                                            />
+                                            <label
+                                                class="form-check-label"
+                                                for="liverCheck"
+                                            >
+                                                Liver
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input
+                                                class="form-check-input"
+                                                type="checkbox"
+                                                value="Heart"
+                                                id="heartCheck"
+                                            />
+                                            <label
+                                                class="form-check-label"
+                                                for="heartCheck"
+                                            >
+                                                Heart
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input
+                                                class="form-check-input"
+                                                type="checkbox"
+                                                value="Lungs"
+                                                id="lungsCheck"
+                                            />
+                                            <label
+                                                class="form-check-label"
+                                                for="lungsCheck"
+                                            >
+                                                Lungs
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input
+                                                class="form-check-input"
+                                                type="checkbox"
+                                                value="Pancreas"
+                                                id="pancreasCheck"
+                                            />
+                                            <label
+                                                class="form-check-label"
+                                                for="pancreasCheck"
+                                            >
+                                                Pancreas
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input
+                                                class="form-check-input"
+                                                type="checkbox"
+                                                value="Corneas"
+                                                id="corneasCheck"
+                                            />
+                                            <label
+                                                class="form-check-label"
+                                                for="corneasCheck"
+                                            >
+                                                Corneas
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="timeOfDeath" class="form-label"
+                                            >Time of Death/Critical Status</label
+                                        >
+                                        <input
+                                            type="datetime-local"
+                                            class="form-control"
+                                            id="timeOfDeath"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <h5 class="border-bottom pb-2 mb-3">
+                                        Additional Information
+                                    </h5>
+                                    <div class="mb-3">
+                                        <label
+                                            for="medicalHistory"
+                                            class="form-label"
+                                            >Relevant Medical History</label
+                                        >
+                                        <textarea
+                                            class="form-control"
+                                            id="medicalHistory"
+                                            rows="3"
+                                        ></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label
+                                            for="additionalNotes"
+                                            class="form-label"
+                                            >Additional Notes</label
+                                        >
+                                        <textarea
+                                            class="form-control"
+                                            id="additionalNotes"
+                                            rows="2"
+                                        ></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="form-check mb-3">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            id="consentConfirmed"
+                                            required
+                                        />
+                                        <label
+                                            class="form-check-label"
+                                            for="consentConfirmed"
+                                        >
+                                            I confirm that proper consent has been
+                                            obtained for organ donation as per legal
+                                            requirements
+                                        </label>
+                                    </div>
+                                    <div
+                                        class="d-grid gap-2 d-md-flex justify-content-md-end"
+                                    >
+                                        <button
+                                            type="reset"
+                                            class="btn btn-secondary me-md-2"
+                                        >
+                                            Clear Form
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            class="btn btn-primary"
+                                        >
+                                            Register Donor
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-list me-2"></i> Recent Donor
+                            Registrations
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="donorsTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Age/Gender</th>
+                                        <th>Blood Type</th>
+                                        <th>Status</th>
+                                        <th>Hospital</th>
+                                        <th>Organs</th>
+                                        <th>Registration Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Donor records will be populated here via JavaScript -->
+                                    <tr>
+                                        <td colspan="8" class="text-center">
+                                            No donor records available
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Modal -->
+    <div
+        class="modal fade"
+        id="successModal"
+        tabindex="-1"
+        aria-labelledby="successModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="successModalLabel">
+                        Registration Successful
+                    </h5>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        The potential donor has been successfully registered in the
+                        system.
+                    </p>
+                    <p>
+                        Donor ID: <span id="donorIdDisplay" class="fw-bold"></span>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                    >
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %} {% block scripts %}
+    <script src="{{ url_for('static', filename='js/donor-registration.js') }}"></script>
+    {% endblock %}
